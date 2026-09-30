@@ -1,283 +1,87 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 30-09-2026 a las 21:18:09
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- ============================================================
+-- BASE DE DATOS: LOCALIZACIÓN DE FERIAS
+-- ============================================================
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- 1. Tabla: Usuarios
+CREATE TABLE Usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) NOT NULL, -- 'consumidor', 'emprendedor', 'organizador'
+    telefono VARCHAR(20),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+-- 2. Tabla: Perfiles_Emprendedor
+CREATE TABLE Perfiles_Emprendedor (
+    id_emprendedor INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    nombre_marca VARCHAR(100) NOT NULL,
+    categoria_producto VARCHAR(50),
+    descripcion_emprendimiento TEXT,
+    redes_sociales TEXT,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE
+);
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+-- 3. Tabla: Ferias
+CREATE TABLE Ferias (
+    id_feria INT AUTO_INCREMENT PRIMARY KEY,
+    id_organizador INT NOT NULL,
+    nombre_feria VARCHAR(120) NOT NULL,
+    descripcion TEXT,
+    direccion_texto VARCHAR(255) NOT NULL,
+    latitud DECIMAL(9,6),
+    longitud DECIMAL(9,6),
+    categoria VARCHAR(50),
+    estado VARCHAR(20) DEFAULT 'activa', -- 'activa', 'cancelada', 'finalizada'
+    imagen_url VARCHAR(255),             -- Para el flyer/portada de la feria
+    instagram VARCHAR(100),              -- Red social de la feria
+    FOREIGN KEY (id_organizador) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE
+);
 
---
--- Base de datos: `feriando`
---
+-- 4. Tabla: Fechas_Feria
+CREATE TABLE Fechas_Feria (
+    id_fecha INT AUTO_INCREMENT PRIMARY KEY,
+    id_feria INT NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    hora_apertura TIME NOT NULL,
+    hora_cierre TIME NOT NULL,
+    FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE CASCADE
+);
 
--- --------------------------------------------------------
+-- 5. Tabla: Feria_Puestos
+CREATE TABLE Feria_Puestos (
+    id_puesto INT AUTO_INCREMENT PRIMARY KEY,
+    id_feria INT NOT NULL,
+    id_emprendedor INT NOT NULL,
+    numero_puesto VARCHAR(20),
+    estado_solicitud VARCHAR(20) DEFAULT 'pendiente', -- 'pendiente', 'aceptado', 'rechazado'
+    FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE CASCADE,
+    FOREIGN KEY (id_emprendedor) REFERENCES Perfiles_Emprendedor(id_emprendedor) ON DELETE CASCADE
+);
 
---
--- Estructura de tabla para la tabla `favoritos`
---
+-- 6. Tabla: Favoritos
+CREATE TABLE Favoritos (
+    id_favorito INT AUTO_INCREMENT PRIMARY KEY,
+    id_consumidor INT NOT NULL,
+    id_feria INT NOT NULL,
+    fecha_guardado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_consumidor) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE CASCADE
+);
 
-CREATE TABLE `favoritos` (
-  `id_favorito` int(11) NOT NULL,
-  `id_consumidor` int(11) NOT NULL,
-  `id_feria` int(11) NOT NULL,
-  `fecha_guardado` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `fechas_feria`
---
-
-CREATE TABLE `fechas_feria` (
-  `id_fecha` int(11) NOT NULL,
-  `id_feria` int(11) NOT NULL,
-  `fecha_inicio` date NOT NULL,
-  `fecha_fin` date NOT NULL,
-  `hora_apertura` time NOT NULL,
-  `hora_cierre` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ferias`
---
-
-CREATE TABLE `ferias` (
-  `id_feria` int(11) NOT NULL,
-  `id_organizador` int(11) NOT NULL,
-  `nombre_feria` varchar(120) NOT NULL,
-  `descripcion` text DEFAULT NULL,
-  `direccion_texto` varchar(255) NOT NULL,
-  `latitud` decimal(9,6) DEFAULT NULL,
-  `longitud` decimal(9,6) DEFAULT NULL,
-  `categoria` varchar(50) DEFAULT NULL,
-  `estado` varchar(20) DEFAULT 'activa',
-  `imagen_url` varchar(255) DEFAULT NULL,
-  `instagram` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `feria_puestos`
---
-
-CREATE TABLE `feria_puestos` (
-  `id_puesto` int(11) NOT NULL,
-  `id_feria` int(11) NOT NULL,
-  `id_emprendedor` int(11) NOT NULL,
-  `numero_puesto` varchar(20) DEFAULT NULL,
-  `estado_solicitud` varchar(20) DEFAULT 'pendiente'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `perfiles_emprendedor`
---
-
-CREATE TABLE `perfiles_emprendedor` (
-  `id_emprendedor` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `nombre_marca` varchar(100) NOT NULL,
-  `categoria_producto` varchar(50) DEFAULT NULL,
-  `descripcion_emprendimiento` text DEFAULT NULL,
-  `redes_sociales` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `resenas`
---
-
-CREATE TABLE `resenas` (
-  `id_resena` int(11) NOT NULL,
-  `id_consumidor` int(11) NOT NULL,
-  `id_feria` int(11) DEFAULT NULL,
-  `id_emprendedor` int(11) DEFAULT NULL,
-  `calificacion` int(11) NOT NULL CHECK (`calificacion` between 1 and 5),
-  `comentario` text DEFAULT NULL,
-  `fecha_resena` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios`
---
-
-CREATE TABLE `usuarios` (
-  `id_usuario` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `contrasena` varchar(255) NOT NULL,
-  `rol` varchar(20) NOT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `favoritos`
---
-ALTER TABLE `favoritos`
-  ADD PRIMARY KEY (`id_favorito`),
-  ADD KEY `id_consumidor` (`id_consumidor`),
-  ADD KEY `id_feria` (`id_feria`);
-
---
--- Indices de la tabla `fechas_feria`
---
-ALTER TABLE `fechas_feria`
-  ADD PRIMARY KEY (`id_fecha`),
-  ADD KEY `id_feria` (`id_feria`);
-
---
--- Indices de la tabla `ferias`
---
-ALTER TABLE `ferias`
-  ADD PRIMARY KEY (`id_feria`),
-  ADD KEY `id_organizador` (`id_organizador`);
-
---
--- Indices de la tabla `feria_puestos`
---
-ALTER TABLE `feria_puestos`
-  ADD PRIMARY KEY (`id_puesto`),
-  ADD KEY `id_feria` (`id_feria`),
-  ADD KEY `id_emprendedor` (`id_emprendedor`);
-
---
--- Indices de la tabla `perfiles_emprendedor`
---
-ALTER TABLE `perfiles_emprendedor`
-  ADD PRIMARY KEY (`id_emprendedor`),
-  ADD KEY `id_usuario` (`id_usuario`);
-
---
--- Indices de la tabla `resenas`
---
-ALTER TABLE `resenas`
-  ADD PRIMARY KEY (`id_resena`),
-  ADD KEY `id_consumidor` (`id_consumidor`),
-  ADD KEY `id_feria` (`id_feria`),
-  ADD KEY `id_emprendedor` (`id_emprendedor`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id_usuario`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `favoritos`
---
-ALTER TABLE `favoritos`
-  MODIFY `id_favorito` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `fechas_feria`
---
-ALTER TABLE `fechas_feria`
-  MODIFY `id_fecha` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `ferias`
---
-ALTER TABLE `ferias`
-  MODIFY `id_feria` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `feria_puestos`
---
-ALTER TABLE `feria_puestos`
-  MODIFY `id_puesto` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `perfiles_emprendedor`
---
-ALTER TABLE `perfiles_emprendedor`
-  MODIFY `id_emprendedor` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `resenas`
---
-ALTER TABLE `resenas`
-  MODIFY `id_resena` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `favoritos`
---
-ALTER TABLE `favoritos`
-  ADD CONSTRAINT `favoritos_ibfk_1` FOREIGN KEY (`id_consumidor`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
-  ADD CONSTRAINT `favoritos_ibfk_2` FOREIGN KEY (`id_feria`) REFERENCES `ferias` (`id_feria`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `fechas_feria`
---
-ALTER TABLE `fechas_feria`
-  ADD CONSTRAINT `fechas_feria_ibfk_1` FOREIGN KEY (`id_feria`) REFERENCES `ferias` (`id_feria`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `ferias`
---
-ALTER TABLE `ferias`
-  ADD CONSTRAINT `ferias_ibfk_1` FOREIGN KEY (`id_organizador`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `feria_puestos`
---
-ALTER TABLE `feria_puestos`
-  ADD CONSTRAINT `feria_puestos_ibfk_1` FOREIGN KEY (`id_feria`) REFERENCES `ferias` (`id_feria`) ON DELETE CASCADE,
-  ADD CONSTRAINT `feria_puestos_ibfk_2` FOREIGN KEY (`id_emprendedor`) REFERENCES `perfiles_emprendedor` (`id_emprendedor`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `perfiles_emprendedor`
---
-ALTER TABLE `perfiles_emprendedor`
-  ADD CONSTRAINT `perfiles_emprendedor_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `resenas`
---
-ALTER TABLE `resenas`
-  ADD CONSTRAINT `resenas_ibfk_1` FOREIGN KEY (`id_consumidor`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE,
-  ADD CONSTRAINT `resenas_ibfk_2` FOREIGN KEY (`id_feria`) REFERENCES `ferias` (`id_feria`) ON DELETE SET NULL,
-  ADD CONSTRAINT `resenas_ibfk_3` FOREIGN KEY (`id_emprendedor`) REFERENCES `perfiles_emprendedor` (`id_emprendedor`) ON DELETE SET NULL;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- 7. Tabla: Resenas
+CREATE TABLE Resenas (
+    id_resena INT AUTO_INCREMENT PRIMARY KEY,
+    id_consumidor INT NOT NULL,
+    id_feria INT NULL,
+    id_emprendedor INT NULL,
+    calificacion INT NOT NULL CHECK (calificacion BETWEEN 1 AND 5),
+    comentario TEXT,
+    fecha_resena TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_consumidor) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE SET NULL,
+    FOREIGN KEY (id_emprendedor) REFERENCES Perfiles_Emprendedor(id_emprendedor) ON DELETE SET NULL
+);
