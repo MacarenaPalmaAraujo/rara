@@ -527,7 +527,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
             'MAYO': { name: 'Mayo', year: 2026, totalDays: 31, startOffset: 5 },
             'JUNIO': { name: 'Junio', year: 2026, totalDays: 30, startOffset: 1 },
             'JULIO': { name: 'Julio', year: 2026, totalDays: 31, startOffset: 3 },
-            'AGOSTO': { name: 'Agosto', year: 2026, totalDays: 31, startOffset: 6 },
+            'AGOSTO': { name: 'Agosto', year: 2026, totalDays: 31, startOffset: 0 },
             'SEPTIEMBRE': { name: 'Septiembre', year: 2026, totalDays: 30, startOffset: 2 },
             'OCTUBRE': { name: 'Octubre', year: 2026, totalDays: 31, startOffset: 4 },
             'NOVIEMBRE': { name: 'Noviembre', year: 2026, totalDays: 30, startOffset: 0 },
@@ -811,13 +811,26 @@ async function processUserLogin(e, mode) {
             const grid = document.getElementById('calendarDaysGrid');
             grid.innerHTML = '';
 
-            for (let i = 0; i < mInfo.startOffset; i++) {
-                grid.insertAdjacentHTML('beforeend', `
-                    <div class="calendar-day-cell bg-white/5 text-slate-600 border-white/5 opacity-40">
-                        <span class="text-xs sm:text-sm font-semibold">${28 + i}</span>
-                    </div>
-                `);
-            }
+           // 1. Obtener las claves de los meses en un array para buscar el mes anterior
+const keys = Object.keys(monthsData);
+const currentIndex = keys.indexOf(mKey);
+// Si es Enero (index 0), el anterior es Diciembre (index 11), sino tomamos el index anterior
+const prevIndex = currentIndex === 0 ? 11 : currentIndex - 1;
+const prevMonthKey = keys[prevIndex];
+const prevMonthTotalDays = monthsData[prevMonthKey].totalDays;
+
+// 2. Renderizar los días de relleno del mes anterior de forma dinámica y correcta
+for (let i = 0; i < mInfo.startOffset; i++) {
+    // Calcula el número de día exacto restando el desfase inverso
+    const dayNumber = prevMonthTotalDays - mInfo.startOffset + 1 + i;
+    
+    grid.insertAdjacentHTML('beforeend', `
+        <div class="calendar-day-cell bg-white/5 text-slate-600 border-white/5 opacity-40">
+            <span class="text-xs sm:text-sm font-semibold">${dayNumber}</span>
+        </div>
+    `);
+}
+
 
             const monthFairs = Object.values(fairsDatabase).filter(f => f.month === mKey);
 
