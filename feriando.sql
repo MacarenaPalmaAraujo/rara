@@ -1,6 +1,7 @@
 -- ============================================================
 -- BASE DE DATOS: LOCALIZACIÓN DE FERIAS
 -- ============================================================
+use feriando;
 
 -- 1. Tabla: Usuarios
 CREATE TABLE Usuarios (
