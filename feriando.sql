@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS feriando;
 USE feriando;
 
 -- 1. Tabla: Usuarios
-CREATE TABLE Usuarios (
+CREATE TABLE IF NOT EXISTS Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
@@ -16,7 +16,7 @@ CREATE TABLE Usuarios (
 );
 
 -- 2. Tabla: Perfiles_Emprendedor
-CREATE TABLE Perfiles_Emprendedor (
+CREATE TABLE IF NOT EXISTS Perfiles_Emprendedor (
     id_emprendedor INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     nombre_marca VARCHAR(100) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Perfiles_Emprendedor (
 );
 
 -- 3. Tabla: Ferias
-CREATE TABLE Ferias (
+CREATE TABLE IF NOT EXISTS Ferias (
     id_feria INT AUTO_INCREMENT PRIMARY KEY,
     id_organizador INT NOT NULL,
     nombre_feria VARCHAR(120) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE Ferias (
 );
 
 -- 4. Tabla: Fechas_Feria
-CREATE TABLE Fechas_Feria (
+CREATE TABLE IF NOT EXISTS Fechas_Feria (
     id_fecha INT AUTO_INCREMENT PRIMARY KEY,
     id_feria INT NOT NULL,
     fecha_inicio DATE NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE Fechas_Feria (
 );
 
 -- 5. Tabla: Feria_Puestos
-CREATE TABLE Feria_Puestos (
+CREATE TABLE IF NOT EXISTS Feria_Puestos (
     id_puesto INT AUTO_INCREMENT PRIMARY KEY,
     id_feria INT NOT NULL,
     id_emprendedor INT NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE Feria_Puestos (
 );
 
 -- 6. Tabla: Favoritos
-CREATE TABLE Favoritos (
+CREATE TABLE IF NOT EXISTS Favoritos (
     id_favorito INT AUTO_INCREMENT PRIMARY KEY,
     id_consumidor INT NOT NULL,
     id_feria INT NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Favoritos (
 );
 
 -- 7. Tabla: Resenas
-CREATE TABLE Resenas (
+CREATE TABLE IF NOT EXISTS Resenas (
     id_resena INT AUTO_INCREMENT PRIMARY KEY,
     id_consumidor INT NOT NULL,
     id_feria INT NULL,
