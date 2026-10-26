@@ -1,7 +1,8 @@
 -- ============================================================
 -- BASE DE DATOS: LOCALIZACIÓN DE FERIAS
 -- ============================================================
-use feriando;
+CREATE DATABASE IF NOT EXISTS feriando;
+USE feriando;
 
 -- 1. Tabla: Usuarios
 CREATE TABLE Usuarios (
