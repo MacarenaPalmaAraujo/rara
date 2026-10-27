@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL,
-    rol VARCHAR(20) NOT NULL, -- 'consumidor', 'emprendedor', 'organizador'
+    FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON DELETE CASCADE, -- 1,2,3 para vincularlo con los permisos
     telefono VARCHAR(20),
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -86,4 +86,13 @@ CREATE TABLE IF NOT EXISTS Resenas (
     FOREIGN KEY (id_consumidor) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE SET NULL,
     FOREIGN KEY (id_emprendedor) REFERENCES Perfiles_Emprendedor(id_emprendedor) ON DELETE SET NULL
+);
+--8 Tabla puente: roles
+CREATE TABLE IF NOT EXISTS roles(
+    id_rol INT NOT NULL PRIMARY KEY,
+    nombre VARCHAR(20) NOT NULL
+);
+--9 Tabla: permisos
+CREATE TABLE IF NOT EXISTS permisos(
+
 );
