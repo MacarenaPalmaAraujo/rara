@@ -10,20 +10,12 @@ if (!isset($data['nombre']) || !isset($data['email']) || !isset($data['contrasen
 }
 
 try {
-    // Mapeo de roles a los ids de la tabla roles (1=consumidor, 2=emprendedor, 3=feria)
-    $rolesMap = [
-        'consumidor' => 1,
-        'emprendedor' => 2,
-        'feria' => 3
-    ];
-    $idRol = $rolesMap[strtolower($data['rol'] ?? 'consumidor')] ?? 1;
-
-    $stmt = $pdo->prepare("INSERT INTO Usuarios (nombre, email, contrasena, id_rol) VALUES (?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO Usuarios (nombre, email, contrasena, rol) VALUES (?, ?, ?, ?)");
     $stmt->execute([
         $data['nombre'],
         $data['email'],
         password_hash($data['contrasena'], PASSWORD_DEFAULT),
-        $idRol
+        $data['rol'] ?? 'consumidor'
     ]);
 
     $id_usuario = $pdo->lastInsertId();
