@@ -27,36 +27,30 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `resenas`
 --
 
-CREATE TABLE `resenas` (
-  `id_resena` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `resenas` (
+  `id_resena` int(11) NOT NULL AUTO_INCREMENT,
   `id_consumidor` int(11) NOT NULL,
-  `id_feria` int(11) NOT NULL,
-  `id_emprendedor` int(11) NOT NULL,
+  `id_feria` int(11) NULL,
+  `id_emprendedor` int(11) NULL,
   `calificacion` int(11) NOT NULL,
-  `comentario` text NOT NULL,
-  `fecha_resena` datetime NOT NULL
+  `comentario` text NULL,
+  `fecha_resena` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_resena`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Índices para tablas volcadas
+-- Indices para la tabla `resenas`
 --
 
---
--- Indices de la tabla `resenas`
---
 ALTER TABLE `resenas`
-  ADD PRIMARY KEY (`id_resena`),
-  ADD KEY `id_consumidor` (`id_consumidor`),
-  ADD KEY `id_feria` (`id_feria`),
-  ADD KEY `id_emprendedor` (`id_emprendedor`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
+  ADD KEY `idx_resenas_consumidor` (`id_consumidor`),
+  ADD KEY `idx_resenas_feria` (`id_feria`),
+  ADD KEY `idx_resenas_emprendedor` (`id_emprendedor`);
 
 --
 -- AUTO_INCREMENT de la tabla `resenas`
 --
+
 ALTER TABLE `resenas`
   MODIFY `id_resena` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;

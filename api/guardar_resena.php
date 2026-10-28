@@ -2,19 +2,43 @@
 header('Content-Type: application/json');
 require_once '../db.php';
 
+// Iniciar sesión PHP para verificar el usuario autenticado
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $data = json_decode(file_get_contents("php://input"), true);
+
+// 1. Jerarquía: si no hay sesión iniciada, no se puede publicar una reseña
+if (empty($_SESSION['usuario_id'])) {
+    echo json_encode(["status" => "error", "message" => "Necesitás iniciar sesión para publicar una reseña."]);
+    exit;
+}
+
+$rolSesion = $_SESSION['rol'] ?? 'consumidor';
+
+// 2. Jerarquía: solo los consumidores pueden publicar reseñas
+if ($rolSesion !== 'consumidor') {
+    echo json_encode(["status" => "error", "message" => "Solo los usuarios con rol de consumidor pueden publicar reseñas."]);
+    exit;
+}
+
+if (!isset($data['id_feria']) || !isset($data['calificacion'])) {
+    echo json_encode(["status" => "error", "message" => "Faltan datos obligatorios"]);
+    exit;
+}
 
 try {
     $stmt = $pdo->prepare("INSERT INTO Resenas (id_consumidor, id_feria, calificacion, comentario) VALUES (?, ?, ?, ?)");
     $stmt->execute([
-        $data['id_consumidor'] ?? 1,
-        $data['id_feria'] ?? 1,
-        $data['calificacion'],
-        $data['comentario']
+        (int) $_SESSION['usuario_id'],
+        (int) $data['id_feria'],
+        (int) $data['calificacion'],
+        $data['comentario'] ?? null
     ]);
 
     echo json_encode(["status" => "success", "message" => "Reseña guardada"]);
 } catch (Exception $e) {
-    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    echo json_encode(["status" => "error", "message" => "Error al guardar la reseña: " . $e->getMessage()]);
 }
 ?>

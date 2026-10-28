@@ -64,7 +64,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                 </div>
             </a>
 
-            <nav class="hidden md:flex items-center gap-2 text-sm font-semibold">
+            <nav id="mainNav" class="hidden md:flex items-center gap-2 text-sm font-semibold">
                 <a href="#calendario" onclick="showSection('home')" class="px-3.5 py-2 rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1.5">
                     <i class="fa-regular fa-calendar-check text-amber-400"></i> Calendario
                 </a>
@@ -74,7 +74,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                 <a href="#conocenos" onclick="openModal('modalConocenos')" class="px-3.5 py-2 rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1.5">
                     <i class="fa-solid fa-users text-yellow-400"></i> Conocenos
                 </a>
-                <button onclick="showSection('pagina5')" class="px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold transition-all shadow flex items-center gap-1.5 text-xs">
+                <button onclick="showFairRegistration()" class="px-3.5 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold transition-all shadow flex items-center gap-1.5 text-xs">
                     <i class="fa-solid fa-bullhorn text-amber-300"></i> Avisar de Feria
                 </button>
             </nav>
@@ -82,10 +82,21 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
 
         <div class="flex items-center gap-3">
             <!-- Botón Dinámico de Autenticación -->
-            <button id="mainAuthBtn" onclick="handleAuthButtonClick()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
-                <i id="mainAuthIcon" class="fa-solid fa-user-plus text-sm"></i>
-                <span id="mainAuthText">Registrarse / Iniciar Sesión</span>
-            </button>
+            <div class="relative">
+                <button id="mainAuthBtn" onclick="handleAuthButtonClick()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
+                    <i id="mainAuthIcon" class="fa-solid fa-user-plus text-sm"></i>
+                    <span id="mainAuthText">Registrarse / Iniciar Sesión</span>
+                </button>
+
+                <!-- Menú de cuenta: solo se muestra cuando hay sesión iniciada -->
+                <div id="authMenu" class="absolute right-0 top-full mt-2 w-60 bg-slate-900 border border-white/10 rounded-2xl shadow-2xl p-3 hidden z-50">
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold px-2">Sesión iniciada como</p>
+                    <p id="authMenuUserName" class="text-sm font-bold text-white px-2 truncate">Invitado</p>
+                    <button onclick="closeSession()" class="w-full mt-3 px-3 py-2 rounded-xl bg-white/5 hover:bg-orange-600 text-white text-xs font-bold flex items-center gap-2 transition-colors">
+                        <i class="fa-solid fa-right-from-bracket text-amber-400"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
 
             <!-- Botón de Menú Ajustes Lateral -->
             <button onclick="toggleDrawer()" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-amber-400 transition-all" title="Menú Lateral">
@@ -119,7 +130,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     </div>
                 </div>
 
-                <div class="pt-2 space-y-2">
+                <div id="drawerQuickAccess" class="pt-2 space-y-2">
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2">Acceso Rápido</p>
                     <button onclick="showSection('home'); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-house text-amber-400"></i> Inicio / Calendario
@@ -130,7 +141,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     <button onclick="showSection('pagina4'); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-store text-amber-400"></i> Formulario Emprendedores
                     </button>
-                    <button onclick="showSection('pagina5'); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
+                    <button onclick="showFairRegistration(); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-flag text-amber-400"></i> Registrar Nueva Feria
                     </button>
                 </div>
@@ -171,7 +182,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     <button onclick="showSection('pagina4')" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
                         <i class="fa-solid fa-store text-amber-400"></i> ¿Sos Emprendedor? Sumate
                     </button>
-                    <button onclick="showSection('pagina5')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
+                    <button onclick="showFairRegistration()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold px-5 py-2.5 rounded-2xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
                         <i class="fa-solid fa-calendar-plus"></i> Registrar Nueva Feria
                     </button>
                 </div>
@@ -211,9 +222,23 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     <h2 id="calendarMonthTitle" class="font-display text-2xl sm:text-3xl font-black text-white">Mayo 2026</h2>
                 </div>
 
-                <div id="calendarBadge" class="inline-flex items-center justify-center bg-orange-600 text-white font-display font-extrabold text-xl sm:text-2xl px-8 py-2 rounded-2xl shadow-lg border border-orange-400/50 uppercase">
-                    MAYO
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="navigateCalendarMonth(-1)" aria-label="Mes anterior" title="Mes anterior" class="w-11 h-11 rounded-2xl bg-white/10 hover:bg-orange-600 border border-white/15 hover:border-orange-400/50 text-amber-400 hover:text-white flex items-center justify-center text-lg shadow-lg transition-all">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <div id="calendarBadge" class="inline-flex items-center justify-center bg-orange-600 text-white font-display font-extrabold text-xl sm:text-2xl px-8 py-2 rounded-2xl shadow-lg border border-orange-400/50 uppercase">
+                        MAYO
+                    </div>
+
+                    <button type="button" onclick="navigateCalendarMonth(1)" aria-label="Mes siguiente" title="Mes siguiente" class="w-11 h-11 rounded-2xl bg-white/10 hover:bg-orange-600 border border-white/15 hover:border-orange-400/50 text-amber-400 hover:text-white flex items-center justify-center text-lg shadow-lg transition-all">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                 </div>
+            </div>
+
+            <div id="categoryFilter" class="flex flex-wrap items-center gap-2">
+                <!-- Categorías de ferias para filtrar (vista consumidor) -->
             </div>
 
             <div class="bg-slate-950/70 rounded-2xl p-3 sm:p-5 border border-white/10">
@@ -266,6 +291,27 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     </a>
                 </div>
 
+                <div class="bg-slate-950/60 rounded-2xl p-4 border border-white/15 space-y-3">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-users text-amber-400"></i>
+                            <h4 class="font-bold text-sm text-white">Emprendedores que asisten</h4>
+                        </div>
+                        <button type="button" onclick="openAsistentesModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-3 py-1.5 rounded-xl text-[10px] uppercase tracking-wide shadow flex items-center gap-1.5 transition-all">
+                            <i class="fa-solid fa-users"></i> Quiénes asisten
+                        </button>
+                    </div>
+                    <div id="asistentesPreview" class="flex items-center gap-2 overflow-x-auto pb-1">
+                        <!-- Dinámico vía JS: fotos de los emprendedores -->
+                    </div>
+                </div>
+
+                <div id="fairImagenContainer" class="hidden relative h-52 rounded-2xl overflow-hidden border-2 border-white/20 shadow-inner bg-slate-950">
+                    <img id="fairImagen" alt="Foto del emprendimiento" class="w-full h-full object-cover">
+                </div>
+
+                <div id="fairDescripcion" class="text-sm text-white/90 italic leading-relaxed"></div>
+
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <label class="text-xs font-bold text-amber-200 uppercase tracking-wider block">Ubicación y Mapa</label>
@@ -297,6 +343,21 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                         </button>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Mensajes publicados por los emprendedores (visibles para el consumidor) -->
+        <section id="mensajesEmprendedores" class="bg-slate-900/90 rounded-3xl border border-white/10 p-5 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Comunidad</span>
+                    <h2 class="font-display text-2xl sm:text-3xl font-black text-white">Mensajes de Emprendedores</h2>
+                </div>
+                <span class="text-[11px] text-slate-400 font-semibold">Novedades y fotos de los emprendimientos</span>
+            </div>
+
+            <div id="avisosList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dinámico vía JS -->
             </div>
         </section>
 
@@ -345,9 +406,6 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     <span class="text-xs font-extrabold text-amber-300 uppercase tracking-widest">Feria</span>
                     <h2 class="font-display text-2xl font-black text-white">Avisar / Registrar Nueva Feria</h2>
                 </div>
-                <button onclick="showSection('home')" class="text-xs bg-slate-900/80 hover:bg-slate-900 text-white font-bold px-3 py-1.5 rounded-xl">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Volver
-                </button>
             </div>
 
             <form onsubmit="registrarNuevaFeriaBD(event)" class="space-y-4">
@@ -358,11 +416,15 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Día</label>
-                        <input type="text" required value="14 de Noviembre del 2026" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                        <input type="date" id="feriaDia" required value="2026-11-14" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                     </div>
                     <div>
-                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Horario</label>
-                        <input type="text" required value="12:00 - 19:00 hs" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Hora de Apertura</label>
+                        <input type="time" id="feriaHoraApertura" required value="12:00" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Hora de Cierre</label>
+                        <input type="time" id="feriaHoraCierre" required value="19:00" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                     </div>
                 </div>
                 <div>
@@ -372,16 +434,62 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Feriantes Esperados</label>
-                        <input type="number" required value="45" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                        <input type="number" min="0" required value="45" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                     </div>
                     <div>
-                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Señor Padre / Responsable</label>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Responsable</label>
                         <input type="text" required value="Carlos Peralta" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                     </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Categoría de la Feria</label>
+                    <select id="feriaCategoria" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                        <option value="">Seleccioná una categoría</option>
+                        <option value="Artesanías">Artesanías</option>
+                        <option value="Comida y Bebidas">Comida y Bebidas</option>
+                        <option value="Libros y Papelería">Libros y Papelería</option>
+                        <option value="Modas y Textiles">Modas y Textiles</option>
+                        <option value="Juguetes y Manualidades">Juguetes y Manualidades</option>
+                        <option value="Música y Espontáneas">Música y Espontáneas</option>
+                    </select>
                 </div>
                 <div class="pt-4">
                     <button type="submit" class="w-full bg-slate-950 hover:bg-slate-900 text-amber-400 font-display font-black py-4 rounded-2xl shadow-xl transition-all border border-amber-400/40 text-base tracking-wide uppercase">
                         Finalizar Registro
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Sección exclusiva del Emprendedor: publicar mensaje + foto -->
+    <section id="sectionPagina6" class="hidden flex-grow max-w-2xl w-full mx-auto px-4 py-8">
+        <div class="bg-gradient-to-br from-orange-600 via-orange-700 to-terracotta rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-orange-400/50 space-y-6">
+            <div class="border-b border-white/20 pb-4">
+                <span class="text-xs font-extrabold text-amber-300 uppercase tracking-widest">Emprendedores</span>
+                <h2 class="font-display text-2xl font-black text-white">Publicá tu Mensaje</h2>
+                <p class="text-xs text-amber-200 font-semibold mt-1">Escribí tu mensaje y subí una foto de tu emprendimiento.</p>
+            </div>
+
+            <form onsubmit="guardarAvisoBD(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Feria en la que Participás</label>
+                    <select id="avisoFeriaId" required class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                        <option value="">Seleccioná una feria</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Mensaje del Emprendedor</label>
+                    <textarea id="avisoMensaje" required rows="5" placeholder="Escribí tu mensaje o aviso..." class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Foto del Emprendimiento</label>
+                    <input type="file" id="avisoFoto" accept="image/*" onchange="previewAvisoFoto(event)" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-amber-400 file:text-slate-950 hover:file:bg-amber-300">
+                    <img id="avisoFotoPreview" alt="Foto del emprendimiento" class="hidden mt-3 w-full h-52 object-cover rounded-2xl border-2 border-white/20 shadow-inner">
+                </div>
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-slate-950 hover:bg-slate-900 text-amber-400 font-display font-black py-4 rounded-2xl shadow-xl transition-all border border-amber-400/40 text-base tracking-wide uppercase">
+                        Publicar Mensaje
                     </button>
                 </div>
             </form>
@@ -473,6 +581,43 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
         </div>
     </div>
 
+    <!-- Modal: Quiénes asisten a la feria -->
+    <div id="asistentesModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-slate-900 border border-white/20 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex items-start justify-between border-b border-white/10 pb-3 gap-3">
+                <div>
+                    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Emprendedores</span>
+                    <h4 class="font-display font-bold text-white text-lg">Quiénes asisten</h4>
+                    <p id="asistentesFairName" class="text-[11px] text-slate-400 font-semibold"></p>
+                </div>
+                <button onclick="closeModal('asistentesModal')" class="text-slate-400 hover:text-white shrink-0"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="asistentesList" class="space-y-3">
+                <!-- Dinámico vía JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Mensajes de un emprendedor -->
+    <div id="emprendedorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-slate-900 border border-white/20 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex items-start justify-between border-b border-white/10 pb-3 gap-3">
+                <div>
+                    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Emprendedor</span>
+                    <h4 id="emprendedorNombre" class="font-display font-bold text-white text-lg">Emprendedor</h4>
+                    <p id="emprendedorFeria" class="text-[11px] text-slate-400 font-semibold"></p>
+                </div>
+                <button onclick="closeModal('emprendedorModal')" class="text-slate-400 hover:text-white shrink-0"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="emprendedorMensajes" class="space-y-4">
+                <!-- Dinámico vía JS -->
+            </div>
+            <button onclick="closeModal('emprendedorModal'); openModal('asistentesModal');" class="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl text-xs">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Volver a los asistentes
+            </button>
+        </div>
+    </div>
+
     <!-- Modal: Conocenos -->
     <div id="modalConocenos" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-slate-900 border border-white/20 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 text-center">
@@ -502,7 +647,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                 <span class="font-display font-bold text-white">Feriando</span>
             </div>
             <p>Derechos Reservados a <?php echo $institutionCopyright; ?></p>
-            <div class="flex items-center gap-4 text-slate-500 text-[11px]">
+            <div id="footerLinks" class="flex items-center gap-4 text-slate-500 text-[11px]">
                 <a href="#calendario" onclick="showSection('home')" class="hover:text-amber-400">Inicio</a>
                 <a href="#meses" onclick="showSection('home')" class="hover:text-amber-400">Ferias</a>
             </div>
@@ -513,10 +658,34 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
     <script>
         // ESTADO DE LA APLICACIÓN
         let currentUser = null; 
-        let selectedRole = 'Consumidor';
+        let selectedRole = 'consumidor';
+        const SESSION_STORAGE_KEY = 'feriando_current_user';
         let activeMonthKey = 'MAYO'; 
-        let activeFairKey = 'Feria del Libro';
+        let activeFairKey = 1;
         let selectedReviewRating = 5;
+        let selectedCategory = 'Todas';
+        let currentFairAvisos = [];
+
+        // CATEGORÍAS DE FERIAS DISPONIBLES PARA FILTRAR (vista del consumidor)
+        const fairCategories = ['Artesanías', 'Comida y Bebidas', 'Libros y Papelería', 'Modas y Textiles', 'Juguetes y Manualidades', 'Música y Espontáneas'];
+
+        // SESIÓN: guardar / cargar usuario en localStorage para persistir el login
+        function saveCurrentUserSession(user) {
+            try {
+                if (user) localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
+                else localStorage.removeItem(SESSION_STORAGE_KEY);
+            } catch (e) { /* almacenamiento no disponible */ }
+        }
+
+        function loadCurrentUserSession() {
+            try {
+                const saved = localStorage.getItem(SESSION_STORAGE_KEY);
+                return saved ? JSON.parse(saved) : null;
+            } catch (e) { return null; }
+        }
+
+        // Restaurar sesión persistida al iniciar la aplicación
+        currentUser = loadCurrentUserSession();
 
         // BASE DE DATOS DE MESES
         const monthsData = {
@@ -536,7 +705,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
 
         // BASE DE DATOS LOCAL
         const fairsDatabase = {
-            'Feria del Libro': {
+            1: {
                 id: 1,
                 title: 'Feria del Libro 2026',
                 month: 'MAYO',
@@ -545,6 +714,9 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                 handle: '@feria.del.libro.2026',
                 address: 'La Rural, Palermo',
                 mapUrl: 'https://maps.google.com/maps?q=La+Rural+Palermo+Buenos+Aires&t=&z=15&ie=UTF8&iwloc=&output=embed',
+                imagen: null,
+                descripcion: null,
+                categoria: 'Libros y Papelería',
                 isFavorite: false,
                 reviews: [
                     { id: 101, author: 'María del Pilar', rating: 5, timeAgo: 'Hace poco', text: 'Gran variedad de stands y excelente atención.', likes: 24, userLiked: false }
@@ -564,24 +736,57 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
                     for (let key in fairsDatabase) delete fairsDatabase[key];
 
                     feriasBD.forEach(f => {
-                        const fechaObj = new Date(f.fecha_inicio);
-                        
-                        fairsDatabase[f.nombre_feria] = {
+                        // Parsear la fecha como local para evitar que se corra un día por zona horaria
+                        const partesFecha = (f.fecha_inicio || '').split('-');
+                        const anio = parseInt(partesFecha[0], 10);
+                        const mesNum = parseInt(partesFecha[1], 10);
+                        const diaNum = parseInt(partesFecha[2], 10);
+                        const fechaObj = new Date(anio, mesNum - 1, diaNum);
+
+                        const mesNombre = fechaObj.toLocaleString('es-ES', { month: 'long' });
+                        const mesKey = mesNombre.charAt(0).toUpperCase() + mesNombre.slice(1).toUpperCase();
+
+                        fairsDatabase[f.id_feria] = {
                             id: f.id_feria,
                             title: f.nombre_feria,
-                            month: 'MAYO',
-                            dayNumber: fechaObj.getDate() + 1,
+                            month: mesKey,
+                            dayNumber: diaNum,
                             dateTime: `${f.fecha_inicio} | ${f.hora_apertura} - ${f.hora_cierre} hs`,
                             handle: f.instagram || '@feria_oficial',
                             address: f.direccion_texto,
                             mapUrl: `https://maps.google.com/maps?q=${encodeURIComponent(f.direccion_texto)}&output=embed`,
+                            imagen: f.imagen_url || null,
+                            descripcion: f.descripcion || null,
+                            categoria: f.categoria || 'Artesanías',
                             isFavorite: false,
                             reviews: []
                         };
                     });
 
+                    // Si hay ferias cargadas desde la BD, seleccionar la primera y renderizar
+                    const primerFeria = Object.values(fairsDatabase)[0];
+                    if (primerFeria) {
+                        activeFairKey = primerFeria.id;
+                        loadFairDetails(primerFeria.id);
+                    }
+
+                    // Sincronizar el selector de feria del formulario del emprendedor
+                    const avisoFeriaSelect = document.getElementById('avisoFeriaId');
+                    if (avisoFeriaSelect) {
+                        const valorActual = avisoFeriaSelect.value;
+                        avisoFeriaSelect.innerHTML = '<option value="">Seleccioná una feria</option>';
+                        Object.values(fairsDatabase).forEach(fair => {
+                            const opt = document.createElement('option');
+                            opt.value = fair.id;
+                            opt.textContent = fair.title;
+                            avisoFeriaSelect.appendChild(opt);
+                        });
+                        if (valorActual) avisoFeriaSelect.value = valorActual;
+                    }
+
                     renderAccordionMonths();
                     renderCalendar(activeMonthKey);
+                    renderCategoryFilter();
                 }
             } catch (error) {
                 console.error("Error al conectar con la base de datos feriando:", error);
@@ -594,6 +799,7 @@ $institutionCopyright = "E.T. N°26 \"Confederación Suiza\"";
             loadFairDetails(activeFairKey);
             updateAuthUI();
             cargarFeriasDesdeBD();
+            cargarAvisos();
         });
 
         // 1. REGISTRAR USUARIO EN MYSQL
@@ -617,9 +823,11 @@ async function processUserLogin(e, mode) {
 
             if (data.status === 'success') {
                 currentUser = { id_usuario: data.id_usuario, name: data.nombre, role: selectedRole };
+                saveCurrentUserSession(currentUser);
                 updateAuthUI();
                 closeModal('authModal');
                 showToast(`¡Usuario ${data.nombre} creado con éxito!`);
+                cargarFavoritos();
             } else {
                 showToast(data.message);
             }
@@ -646,9 +854,11 @@ async function processUserLogin(e, mode) {
                     name: data.usuario.nombre, 
                     role: data.usuario.rol 
                 };
+                saveCurrentUserSession(currentUser);
                 updateAuthUI();
                 closeModal('authModal');
                 showToast(`¡Bienvenido/a de nuevo, ${data.usuario.nombre}!`);
+                cargarFavoritos();
             } else {
                 // Muestra el mensaje de error de cuenta no encontrada o clave errónea
                 showToast(data.message);
@@ -665,14 +875,37 @@ async function processUserLogin(e, mode) {
             const form = e.target;
             const inputs = form.querySelectorAll('input');
 
+            // JERARQUÍA: si no hay sesión iniciada, no se puede registrar una feria
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Necesitás iniciar sesión para registrar una feria.');
+                return;
+            }
+
+            // JERARQUÍA: solo los roles autorizados (feria) pueden registrar ferias
+            const rolesPermitidosRegistrarFeria = ['feria'];
+            if (!rolesPermitidosRegistrarFeria.includes((currentUser.role || '').toLowerCase())) {
+                showToast('Tu rol no tiene permisos para registrar una feria.');
+                return;
+            }
+
             const feriaData = {
-                id_organizador: currentUser ? currentUser.id_usuario : 1,
+                id_organizador: currentUser.id_usuario,
                 nombre_feria: inputs[0].value,
                 direccion_texto: inputs[0].value,
-                fecha_inicio: "2026-11-14",
-                hora_apertura: "12:00:00",
-                hora_cierre: "19:00:00"
+                categoria: document.getElementById('feriaCategoria')?.value || null,
+                fecha_inicio: document.getElementById('feriaDia')?.value || "2026-11-14",
+                hora_apertura: ((document.getElementById('feriaHoraApertura')?.value || '12:00') + ':00'),
+                hora_cierre: ((document.getElementById('feriaHoraCierre')?.value || '19:00') + ':00')
             };
+
+            // VALIDACIÓN: los feriantes esperados no pueden ser negativos
+            const feriantesInput = form.querySelector('input[type="number"]');
+            const feriantesEsperados = feriantesInput ? parseInt(feriantesInput.value, 10) : 45;
+            if (isNaN(feriantesEsperados) || feriantesEsperados < 0) {
+                showToast('Los feriantes esperados no pueden ser números negativos.');
+                return;
+            }
 
             try {
                 const res = await fetch('api/guardar_feria.php', {
@@ -700,6 +933,19 @@ async function processUserLogin(e, mode) {
             const comment = document.getElementById('reviewCommentText').value.trim();
             if (!comment) return;
 
+            // JERARQUÍA: si no hay sesión iniciada, no se puede publicar una reseña
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Necesitás iniciar sesión para publicar una reseña.');
+                return;
+            }
+
+            // JERARQUÍA: solo los consumidores pueden publicar reseñas
+            if ((currentUser.role || '').toLowerCase() !== 'consumidor') {
+                showToast('Solo los usuarios con rol de consumidor pueden publicar reseñas.');
+                return;
+            }
+
             const fair = fairsDatabase[activeFairKey];
 
             try {
@@ -707,7 +953,7 @@ async function processUserLogin(e, mode) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        id_consumidor: currentUser ? currentUser.id_usuario : 1,
+                        id_consumidor: currentUser.id_usuario,
                         id_feria: fair ? fair.id : 1,
                         calificacion: selectedReviewRating,
                         comentario: comment
@@ -728,15 +974,49 @@ async function processUserLogin(e, mode) {
 
         // NAVEGACIÓN ENTRE SECCIONES
         function showSection(sectionId) {
+            // El emprendedor solo accede a su página de mensaje + foto
+            // La feria solo accede a su formulario para publicar una feria
+            const rolActual = (currentUser && currentUser.role ? currentUser.role : '').toLowerCase();
+            if (rolActual === 'emprendedor') sectionId = 'pagina6';
+            if (rolActual === 'feria') sectionId = 'pagina5';
+
             document.getElementById('sectionHome').classList.add('hidden');
             document.getElementById('sectionPagina4').classList.add('hidden');
             document.getElementById('sectionPagina5').classList.add('hidden');
+            document.getElementById('sectionPagina6').classList.add('hidden');
 
             if (sectionId === 'home') document.getElementById('sectionHome').classList.remove('hidden');
             if (sectionId === 'pagina4') document.getElementById('sectionPagina4').classList.remove('hidden');
             if (sectionId === 'pagina5') document.getElementById('sectionPagina5').classList.remove('hidden');
+            if (sectionId === 'pagina6') document.getElementById('sectionPagina6').classList.remove('hidden');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // NAVEGACIÓN PROTEGIDA: Avisar / Registrar Feria
+        // - Rol 'feria': acceso al formulario completo de registro de feria.
+        // - Rol 'emprendedor': acceso al formulario simple de envío de aviso.
+        // - Rol 'consumidor': sin permisos para avisar de ferias.
+        function showFairRegistration() {
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Necesitás iniciar sesión para avisar de una feria.');
+                return;
+            }
+
+            const rolActual = (currentUser.role || '').toLowerCase();
+
+            if (rolActual === 'feria') {
+                showSection('pagina5');
+                return;
+            }
+
+            if (rolActual === 'emprendedor') {
+                showSection('pagina6');
+                return;
+            }
+
+            showToast('Solo los emprendedores y ferias pueden avisar de ferias.');
         }
 
         // RENDER DEL ACORDEÓN DE MESES
@@ -747,7 +1027,7 @@ async function processUserLogin(e, mode) {
             Object.keys(monthsData).forEach(mKey => {
                 const mInfo = monthsData[mKey];
                 const isOpen = (mKey === activeMonthKey);
-                const monthFairs = Object.values(fairsDatabase).filter(f => f.month === mKey);
+                const monthFairs = Object.values(fairsDatabase).filter(f => f.month === mKey && (selectedCategory === 'Todas' || f.categoria === selectedCategory));
 
                 const itemHtml = `
                     <div class="rounded-2xl overflow-hidden border ${isOpen ? 'bg-orange-600/20 border-orange-500/50' : 'bg-white/5 border-white/10'} transition-all">
@@ -802,6 +1082,24 @@ async function processUserLogin(e, mode) {
             renderCalendar(activeMonthKey);
         }
 
+        // NAVEGACIÓN ENTRE MESES DEL CALENDARIO
+        function navigateCalendarMonth(offset) {
+            const keys = Object.keys(monthsData);
+            const currentIndex = keys.indexOf(activeMonthKey);
+            const newIndex = (currentIndex + offset + keys.length) % keys.length;
+            const newMonthKey = keys[newIndex];
+
+            activeMonthKey = newMonthKey;
+            renderCalendar(newMonthKey);
+
+            // Sincronizar la feria seleccionada con el mes visualizado
+            const firstFairInMonth = Object.values(fairsDatabase).find(f => f.month === newMonthKey);
+            if (firstFairInMonth) {
+                activeFairKey = firstFairInMonth.id;
+                loadFairDetails(activeFairKey);
+            }
+        }
+
         // RENDER DEL CALENDARIO
         function renderCalendar(mKey) {
             const mInfo = monthsData[mKey];
@@ -832,7 +1130,7 @@ for (let i = 0; i < mInfo.startOffset; i++) {
 }
 
 
-            const monthFairs = Object.values(fairsDatabase).filter(f => f.month === mKey);
+            const monthFairs = Object.values(fairsDatabase).filter(f => f.month === mKey && (selectedCategory === 'Todas' || f.categoria === selectedCategory));
 
             for (let d = 1; d <= mInfo.totalDays; d++) {
                 const fairOnDay = monthFairs.find(f => f.dayNumber === d);
@@ -880,6 +1178,24 @@ for (let i = 0; i < mInfo.startOffset; i++) {
             document.getElementById('fairAddressLabel').textContent = fair.address;
             document.getElementById('fairGoogleMap').src = fair.mapUrl;
 
+            // Mostrar / ocultar la foto del emprendimiento
+            const imagenContainer = document.getElementById('fairImagenContainer');
+            const fairImagen = document.getElementById('fairImagen');
+            const fairDescripcion = document.getElementById('fairDescripcion');
+
+            if (imagenContainer && fairImagen) {
+                if (fair.imagen) {
+                    fairImagen.src = fair.imagen;
+                    imagenContainer.classList.remove('hidden');
+                } else {
+                    imagenContainer.classList.add('hidden');
+                }
+            }
+
+            if (fairDescripcion) {
+                fairDescripcion.textContent = fair.descripcion || '';
+            }
+
             const favBtn = document.getElementById('fairFavoriteBtn');
             const favBadge = document.getElementById('fairFavoriteBadge');
 
@@ -892,18 +1208,342 @@ for (let i = 0; i < mInfo.startOffset; i++) {
             }
 
             renderReviewsList(fair);
+            cargarAsistentesFeria(fair.id);
         }
 
-        function toggleFairFavorite() {
+        async function toggleFairFavorite() {
             const fair = fairsDatabase[activeFairKey];
             if (!fair) return;
 
-            fair.isFavorite = !fair.isFavorite;
-            showToast(fair.isFavorite ? `¡${fair.title} en FAVORITAS! ⭐` : `Se quitó ${fair.title} de favoritas.`);
+            // JERARQUÍA: solo los consumidores pueden guardar favoritos
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Necesitás iniciar sesión para guardar favoritas.');
+                return;
+            }
 
-            loadFairDetails(activeFairKey);
-            renderAccordionMonths();
+            const rolActual = (currentUser.role || '').toLowerCase();
+            if (rolActual !== 'consumidor') {
+                showToast('Solo los consumidores pueden guardar ferias en favoritos.');
+                return;
+            }
+
+            try {
+                const res = await fetch('api/guardar_favorito.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_feria: fair.id })
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    fair.isFavorite = data.is_favorito;
+                    showToast(fair.isFavorite ? `¡${fair.title} en FAVORITAS! ⭐` : `Se quitó ${fair.title} de favoritas.`);
+
+                    loadFairDetails(activeFairKey);
+                    renderAccordionMonths();
+                    renderCalendar(activeMonthKey);
+                } else {
+                    showToast('Error: ' + data.message);
+                }
+            } catch (err) {
+                showToast('Error al guardar la feria en favoritas.');
+            }
+        }
+
+        // CARGAR FAVORITOS DE UN CONSUMIDOR DESDE LA BD
+        async function cargarFavoritos() {
+            if (!currentUser) return;
+            if ((currentUser.role || '').toLowerCase() !== 'consumidor') return;
+
+            try {
+                const res = await fetch('api/get_favoritos.php');
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    const idsFavoritos = data.data.map(f => f.id_feria);
+                    Object.values(fairsDatabase).forEach(f => { f.isFavorite = idsFavoritos.includes(f.id); });
+                    renderAccordionMonths();
+                    renderCalendar(activeMonthKey);
+                    loadFairDetails(activeFairKey);
+                }
+            } catch (err) { /* Sin conexión a BD: se mantiene el estado local */ }
+        }
+
+        function escapeHtml(texto) {
+            return String(texto ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        // CARGAR MENSAJES DE EMPRENDEDORES (VISIBLES PARA EL CONSUMIDOR)
+        async function cargarAvisos() {
+            const container = document.getElementById('avisosList');
+            if (!container) return;
+
+            try {
+                const res = await fetch('api/get_avisos.php');
+                const data = await res.json();
+
+                if (data.status !== 'success') return;
+
+                const avisos = data.data || [];
+
+                if (avisos.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-xs italic">Todavía no hay mensajes publicados por los emprendedores.</div>`;
+                    return;
+                }
+
+                container.innerHTML = avisos.map(a => {
+                    const fecha = a.fecha_creacion ? new Date(String(a.fecha_creacion).replace(' ', 'T')) : null;
+                    const fechaTexto = fecha ? fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }) : '';
+                    const inicial = escapeHtml((a.emprendedor || 'E').charAt(0).toUpperCase());
+                    const imagen = a.imagen_url
+                        ? `<img src="${escapeHtml(a.imagen_url)}" alt="Foto de ${escapeHtml(a.emprendedor)}" class="w-full h-44 object-cover border-b border-white/10">`
+                        : '';
+
+                    return `
+                        <article class="bg-slate-950/70 rounded-2xl border border-white/10 overflow-hidden flex flex-col">
+                            ${imagen}
+                            <div class="p-4 space-y-3 flex-1 flex flex-col">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 font-black text-xs flex items-center justify-center shrink-0">${inicial}</div>
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-bold text-white truncate">${escapeHtml(a.emprendedor)}</p>
+                                        <p class="text-[10px] text-slate-400">${escapeHtml(fechaTexto)}${a.nombre_feria ? ' · ' + escapeHtml(a.nombre_feria) : ''}</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-200 italic leading-relaxed">"${escapeHtml(a.mensaje)}"</p>
+                            </div>
+                        </article>
+                    `;
+                }).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-xs italic">No se pudieron cargar los mensajes.</div>`;
+            }
+        }
+
+        // ASISTENTES / EMPRENDEDORES DE LA FERIA
+        async function cargarAsistentesFeria(fairId) {
+            const preview = document.getElementById('asistentesPreview');
+            if (!preview) return;
+
+            if (!fairId) {
+                currentFairAvisos = [];
+                preview.innerHTML = '';
+                return;
+            }
+
+            try {
+                const res = await fetch(`api/get_avisos.php?id_feria=${encodeURIComponent(fairId)}`);
+                const data = await res.json();
+
+                // Evitar que una respuesta vieja pise la feria que se está viendo
+                const feriaActual = fairsDatabase[activeFairKey];
+                if (!feriaActual || Number(feriaActual.id) !== Number(fairId)) return;
+
+                currentFairAvisos = (data.status === 'success' && Array.isArray(data.data)) ? data.data : [];
+                renderAsistentesPreview();
+            } catch (err) {
+                currentFairAvisos = [];
+                renderAsistentesPreview();
+            }
+        }
+
+        function agruparAsistentes() {
+            const grupos = new Map();
+            currentFairAvisos.forEach(a => {
+                const id = Number(a.id_emprendedor);
+                if (!grupos.has(id)) {
+                    grupos.set(id, {
+                        id_emprendedor: id,
+                        emprendedor: a.emprendedor,
+                        imagen_url: a.imagen_url,
+                        nombre_feria: a.nombre_feria,
+                        mensajes: []
+                    });
+                }
+                grupos.get(id).mensajes.push(a);
+            });
+            return [...grupos.values()];
+        }
+
+        function renderAsistentesPreview() {
+            const preview = document.getElementById('asistentesPreview');
+            if (!preview) return;
+
+            const asistentes = agruparAsistentes();
+
+            if (asistentes.length === 0) {
+                preview.innerHTML = `<p class="text-[11px] text-slate-400 italic">Todavía no hay emprendedores que avisaron para esta feria.</p>`;
+                return;
+            }
+
+            preview.innerHTML = asistentes.slice(0, 10).map(a => `
+                <button type="button" onclick="verMensajesEmprendedor(${a.id_emprendedor})" title="${escapeHtml(a.emprendedor)}" class="shrink-0 group">
+                    ${a.imagen_url
+                        ? `<img src="${escapeHtml(a.imagen_url)}" alt="${escapeHtml(a.emprendedor)}" class="w-11 h-11 rounded-full object-cover border-2 border-amber-400/60 group-hover:border-amber-300 transition-all">`
+                        : `<span class="w-11 h-11 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 font-black flex items-center justify-center border-2 border-amber-400/60">${escapeHtml((a.emprendedor || 'E').charAt(0).toUpperCase())}</span>`}
+                </button>
+            `).join('') + (asistentes.length > 10 ? `<span class="text-[10px] text-slate-400 font-bold shrink-0">+${asistentes.length - 10}</span>` : '');
+        }
+
+        function openAsistentesModal() {
+            const fair = fairsDatabase[activeFairKey];
+            if (!fair) return;
+
+            const nombre = document.getElementById('asistentesFairName');
+            if (nombre) nombre.textContent = fair.title;
+
+            renderAsistentesLista();
+            openModal('asistentesModal');
+        }
+
+        function renderAsistentesLista() {
+            const container = document.getElementById('asistentesList');
+            if (!container) return;
+
+            const asistentes = agruparAsistentes();
+
+            if (asistentes.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs italic">Todavía no hay emprendedores que avisaron para esta feria.</div>`;
+                return;
+            }
+
+            container.innerHTML = asistentes.map(a => {
+                const cantidad = a.mensajes.length;
+                return `
+                    <button type="button" onclick="verMensajesEmprendedor(${a.id_emprendedor})" class="w-full text-left bg-slate-950/70 hover:bg-slate-800 border border-white/10 hover:border-amber-400/50 rounded-2xl p-3 flex items-center gap-3 transition-all">
+                        ${a.imagen_url
+                            ? `<img src="${escapeHtml(a.imagen_url)}" alt="${escapeHtml(a.emprendedor)}" class="w-11 h-11 rounded-full object-cover border-2 border-amber-400/60 shrink-0">`
+                            : `<span class="w-11 h-11 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 font-black flex items-center justify-center border-2 border-amber-400/60 shrink-0">${escapeHtml((a.emprendedor || 'E').charAt(0).toUpperCase())}</span>`}
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-bold text-white truncate">${escapeHtml(a.emprendedor)}</p>
+                            <p class="text-[11px] text-slate-400 truncate">${cantidad} ${cantidad === 1 ? 'mensaje publicado' : 'mensajes publicados'}</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-amber-400"></i>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function verMensajesEmprendedor(idEmprendedor) {
+            const mensajes = currentFairAvisos.filter(a => Number(a.id_emprendedor) === Number(idEmprendedor));
+            if (mensajes.length === 0) return;
+
+            const primero = mensajes[0];
+            document.getElementById('emprendedorNombre').textContent = primero.emprendedor;
+            const feriaLabel = document.getElementById('emprendedorFeria');
+            if (feriaLabel) feriaLabel.textContent = primero.nombre_feria || '';
+
+            document.getElementById('emprendedorMensajes').innerHTML = mensajes.map(m => {
+                const fecha = m.fecha_creacion ? new Date(String(m.fecha_creacion).replace(' ', 'T')) : null;
+                const fechaTexto = fecha ? fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }) : '';
+                return `
+                    <article class="bg-slate-950/70 rounded-2xl border border-white/10 overflow-hidden">
+                        ${m.imagen_url ? `<img src="${escapeHtml(m.imagen_url)}" alt="Foto de ${escapeHtml(m.emprendedor)}" class="w-full h-56 object-cover border-b border-white/10">` : ''}
+                        <div class="p-4 space-y-2">
+                            <p class="text-xs text-slate-400 font-semibold">${escapeHtml(fechaTexto)}</p>
+                            <p class="text-sm text-slate-200 italic leading-relaxed">"${escapeHtml(m.mensaje)}"</p>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+
+            closeModal('asistentesModal');
+            openModal('emprendedorModal');
+        }
+
+        // FILTRO POR CATEGORÍAS (CONSUMIDOR)
+        function renderCategoryFilter() {
+            const container = document.getElementById('categoryFilter');
+            if (!container) return;
+
+            const categories = ['Todas', ...fairCategories];
+            container.innerHTML = categories.map(cat => `
+                <button type="button" onclick="selectCategory('${cat}')" class="px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wide border transition-all ${selectedCategory === cat ? 'bg-orange-600 text-white border-orange-400 shadow-lg' : 'bg-white/5 text-slate-300 border-white/15 hover:bg-white/10 hover:text-white'}">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function selectCategory(cat) {
+            selectedCategory = cat;
+            renderCategoryFilter();
             renderCalendar(activeMonthKey);
+            renderAccordionMonths();
+        }
+
+        // VISTA PREVIA DE LA FOTO DEL EMPRENDEDOR
+        function previewAvisoFoto(event) {
+            const archivo = event.target.files && event.target.files[0];
+            const preview = document.getElementById('avisoFotoPreview');
+            if (!archivo || !preview) return;
+
+            preview.src = URL.createObjectURL(archivo);
+            preview.classList.remove('hidden');
+        }
+
+        // PUBLICAR MENSAJE + FOTO DESDE EL ROL EMPRENDEDOR
+        async function guardarAvisoBD(e) {
+            e.preventDefault();
+
+            const mensaje = document.getElementById('avisoMensaje')?.value.trim();
+            const idFeria = document.getElementById('avisoFeriaId')?.value;
+            const fotoInput = document.getElementById('avisoFoto');
+            const fotoPreview = document.getElementById('avisoFotoPreview');
+
+            if (!currentUser) {
+                openModal('authModal');
+                showToast('Necesitás iniciar sesión para publicar tu mensaje.');
+                return;
+            }
+
+            const rolActual = (currentUser.role || '').toLowerCase();
+            if (rolActual !== 'emprendedor') {
+                showToast('Solo los emprendedores pueden publicar este mensaje.');
+                return;
+            }
+
+            if (!mensaje) {
+                showToast('Escribí el mensaje del emprendedor.');
+                return;
+            }
+
+            if (!idFeria) {
+                showToast('Seleccioná la feria en la que participás.');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('mensaje', mensaje);
+                formData.append('id_feria', idFeria);
+                if (fotoInput && fotoInput.files && fotoInput.files[0]) {
+                    formData.append('foto', fotoInput.files[0]);
+                }
+
+                const res = await fetch('api/guardar_aviso.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    showToast('¡Mensaje publicado con éxito!');
+                    document.getElementById('avisoMensaje').value = '';
+                    if (fotoInput) fotoInput.value = '';
+                    if (fotoPreview) {
+                        fotoPreview.classList.add('hidden');
+                        fotoPreview.removeAttribute('src');
+                    }
+                    cargarAvisos();
+                } else {
+                    showToast('Error: ' + data.message);
+                }
+            } catch (err) {
+                showToast('Error al publicar el mensaje.');
+            }
         }
 
         function renderReviewsList(fair) {
@@ -953,26 +1593,109 @@ for (let i = 0; i < mInfo.startOffset; i++) {
         }
 
         function handleAuthButtonClick() {
+            const authMenu = document.getElementById('authMenu');
+            const authMenuUser = document.getElementById('authMenuUserName');
+
             if (currentUser) {
-                currentUser = null;
-                updateAuthUI();
-                showToast('Has cerrado sesión correctamente.');
-            } else {
-                openModal('authModal');
+                // Con sesión iniciada: alternar el menú de cuenta (no se cierra la sesión al tocar el botón)
+                if (authMenu) authMenu.classList.toggle('hidden');
+                if (authMenuUser) authMenuUser.textContent = currentUser.name;
+                return;
             }
+
+            openModal('authModal');
+        }
+
+        async function closeSession() {
+            // Cerrar la sesión en el servidor
+            try {
+                await fetch('api/logout_usuario.php', { method: 'POST' });
+            } catch (err) { /* Si falla el logout del servidor, igual limpiamos la sesión local */ }
+
+            currentUser = null;
+            saveCurrentUserSession(null);
+            updateAuthUI();
+            showToast('Has cerrado sesión correctamente.');
+            const authMenu = document.getElementById('authMenu');
+            if (authMenu) authMenu.classList.add('hidden');
         }
 
         function updateAuthUI() {
-            const mainAuthBtn = document.getElementById('mainAuthBtn');
             const mainAuthText = document.getElementById('mainAuthText');
             const mainAuthIcon = document.getElementById('mainAuthIcon');
 
             if (currentUser) {
                 mainAuthText.textContent = `¡Hola, ${currentUser.name}!`;
                 mainAuthIcon.className = 'fa-solid fa-circle-user text-sm';
+
+                // Sincronizar el menú de cuenta (authMenu)
+                const authMenu = document.getElementById('authMenu');
+                const authMenuUser = document.getElementById('authMenuUserName');
+                if (authMenu) authMenu.classList.remove('hidden');
+                if (authMenuUser) authMenuUser.textContent = currentUser.name;
             } else {
                 mainAuthText.textContent = 'Registrarse / Iniciar Sesión';
                 mainAuthIcon.className = 'fa-solid fa-user-plus text-sm';
+
+                const authMenu = document.getElementById('authMenu');
+                const authMenuUser = document.getElementById('authMenuUserName');
+                if (authMenu) authMenu.classList.add('hidden');
+                if (authMenuUser) authMenuUser.textContent = 'Invitado';
+            }
+
+            // Sincronizar el perfil del menú lateral (drawer)
+            const drawerUserName = document.getElementById('drawerUserName');
+            const drawerUserRole = document.getElementById('drawerUserRole');
+
+            if (currentUser) {
+                if (drawerUserName) drawerUserName.textContent = currentUser.name;
+                if (drawerUserRole) drawerUserRole.textContent = currentUser.role ? currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1) : 'Consumidor';
+            } else {
+                if (drawerUserName) drawerUserName.textContent = 'Invitado';
+                if (drawerUserRole) drawerUserRole.textContent = 'Sin sesión iniciada';
+            }
+
+            // Aplicar la vista exclusiva según el rol (el emprendedor solo ve su mensaje)
+            applyRoleUI();
+        }
+
+        // VISTAS EXCLUSIVAS POR ROL:
+        // - Emprendedor: solo su formulario de mensaje + foto.
+        // - Feria: solo su formulario para publicar una feria.
+        function applyRoleUI() {
+            const rolActual = (currentUser && currentUser.role ? currentUser.role : '').toLowerCase();
+            const esEmprendedor = rolActual === 'emprendedor';
+            const esFeria = rolActual === 'feria';
+            const vistaRestringida = esEmprendedor || esFeria;
+
+            const mainNav = document.getElementById('mainNav');
+            if (mainNav) mainNav.style.display = vistaRestringida ? 'none' : '';
+
+            const drawerQuickAccess = document.getElementById('drawerQuickAccess');
+            if (drawerQuickAccess) drawerQuickAccess.style.display = vistaRestringida ? 'none' : '';
+
+            const footerLinks = document.getElementById('footerLinks');
+            if (footerLinks) footerLinks.style.display = vistaRestringida ? 'none' : '';
+
+            const home = document.getElementById('sectionHome');
+            const pagina4 = document.getElementById('sectionPagina4');
+            const pagina5 = document.getElementById('sectionPagina5');
+            const pagina6 = document.getElementById('sectionPagina6');
+            if (!home || !pagina5 || !pagina6) return;
+
+            home.classList.add('hidden');
+            if (pagina4) pagina4.classList.add('hidden');
+
+            if (esEmprendedor) {
+                pagina5.classList.add('hidden');
+                pagina6.classList.remove('hidden');
+            } else if (esFeria) {
+                pagina6.classList.add('hidden');
+                pagina5.classList.remove('hidden');
+            } else {
+                pagina5.classList.add('hidden');
+                pagina6.classList.add('hidden');
+                home.classList.remove('hidden');
             }
         }
 

@@ -2,6 +2,11 @@
 header('Content-Type: application/json');
 require_once '../db.php';
 
+// Iniciar sesión PHP para poder guardar el estado de autenticación
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Leer los datos JSON enviados por el frontend
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -14,8 +19,8 @@ if (empty($email) || empty($contrasena)) {
 }
 
 try {
-    // Buscar al usuario por su email
-    $stmt = $pdo->prepare("SELECT id_usuario, nombre, email, contrasena, rol FROM Usuarios WHERE email = ?");
+    // Buscar al usuario por su email uniéndolo con su rol
+    $stmt = $pdo->prepare("SELECT u.id_usuario, u.nombre, u.email, u.contrasena, r.nombre AS rol FROM Usuarios u INNER JOIN roles r ON u.id_rol = r.id_rol WHERE u.email = ?");
     $stmt->execute([$email]);
     $usuario = $stmt->fetch();
 
@@ -38,6 +43,10 @@ try {
     }
 
     // 3. Login exitoso
+    // Guardamos la sesión en el servidor para restringir acciones por rol
+    $_SESSION['usuario_id'] = $usuario['id_usuario'];
+    $_SESSION['rol'] = $usuario['rol'];
+
     echo json_encode([
         "status" => "success",
         "usuario" => [

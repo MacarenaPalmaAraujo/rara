@@ -4,15 +4,27 @@
 CREATE DATABASE IF NOT EXISTS feriando;
 USE feriando;
 
+-- 0. Tabla: Roles (jerarquía de permisos: 1=Consumidor, 2=Emprendedor, 3=Feria)
+CREATE TABLE IF NOT EXISTS roles(
+    id_rol INT NOT NULL PRIMARY KEY,
+    nombre VARCHAR(20) NOT NULL
+);
+
+INSERT INTO roles (id_rol, nombre) VALUES
+    (1, 'consumidor'),
+    (2, 'emprendedor'),
+    (3, 'feria');
+
 -- 1. Tabla: Usuarios
 CREATE TABLE IF NOT EXISTS Usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL,
-    FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON DELETE CASCADE, -- 1,2,3 para vincularlo con los permisos
+    id_rol INT NOT NULL DEFAULT 1, -- FK a roles(id_rol)
     telefono VARCHAR(20),
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON DELETE CASCADE
 );
 
 -- 2. Tabla: Perfiles_Emprendedor
@@ -87,12 +99,32 @@ CREATE TABLE IF NOT EXISTS Resenas (
     FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE SET NULL,
     FOREIGN KEY (id_emprendedor) REFERENCES Perfiles_Emprendedor(id_emprendedor) ON DELETE SET NULL
 );
---8 Tabla puente: roles
-CREATE TABLE IF NOT EXISTS roles(
-    id_rol INT NOT NULL PRIMARY KEY,
-    nombre VARCHAR(20) NOT NULL
-);
---9 Tabla: permisos
-CREATE TABLE IF NOT EXISTS permisos(
 
+-- 8. Tabla: Avisos (mensajes y fotos que publican los emprendedores)
+CREATE TABLE IF NOT EXISTS Avisos (
+    id_aviso INT AUTO_INCREMENT PRIMARY KEY,
+    id_emprendedor INT NOT NULL,
+    id_feria INT NULL,
+    mensaje VARCHAR(255) NOT NULL,
+    imagen_url VARCHAR(255),           -- Foto publicada por el emprendedor
+    estado VARCHAR(20) DEFAULT 'pendiente', -- 'pendiente', 'confirmado', 'cancelado'
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_emprendedor) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_feria) REFERENCES Ferias(id_feria) ON DELETE SET NULL
 );
+
+--9 Tabla: permisos (jerarquía de permisos por rol)
+CREATE TABLE IF NOT EXISTS permisos (
+    id_rol INT NOT NULL,
+    permiso VARCHAR(50) NOT NULL, -- ej: 'registrar_ferias', 'publicar_resenas'
+    PRIMARY KEY (id_rol, permiso),
+    FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON DELETE CASCADE
+);
+
+-- Permisos base por rol
+INSERT INTO permisos (id_rol, permiso) VALUES
+    (1, 'ver_ferias'),
+    (1, 'publicar_resenas'),
+    (2, 'registrar_ferias'),
+    (2, 'publicar_ferias'),
+    (3, 'registrar_ferias');

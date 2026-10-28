@@ -5,7 +5,7 @@ require_once '../db.php';
 
 try {
     // Unimos la tabla Ferias con Fechas_Feria usando sus Foreign Keys
-    $sql = "SELECT f.id_feria, f.nombre_feria, f.direccion_texto, f.instagram, 
+    $sql = "SELECT f.id_feria, f.nombre_feria, f.direccion_texto, f.instagram, f.descripcion, f.imagen_url, f.categoria, 
                    ff.fecha_inicio, ff.hora_apertura, ff.hora_cierre
             FROM Ferias f
             LEFT JOIN Fechas_Feria ff ON f.id_feria = ff.id_feria
