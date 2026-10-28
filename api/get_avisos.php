@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 require_once '../db.php';
 
 try {
-    // Compatibilidad: crear la tabla Avisos si todavía no existe en la BD
     $pdo->exec("CREATE TABLE IF NOT EXISTS Avisos (
         id_aviso INT AUTO_INCREMENT PRIMARY KEY,
         id_emprendedor INT NOT NULL,
@@ -13,14 +12,10 @@ try {
         estado VARCHAR(20) DEFAULT 'pendiente',
         fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-    // Compatibilidad: agregar la columna imagen_url si la tabla ya existía sin ella
     $columnaImagen = $pdo->query("SHOW COLUMNS FROM Avisos LIKE 'imagen_url'")->fetch();
     if (!$columnaImagen) {
         $pdo->exec("ALTER TABLE Avisos ADD COLUMN imagen_url VARCHAR(255) NULL AFTER mensaje");
     }
-
-    // Filtros opcionales: por feria y/o por emprendedor
     $where = [];
     $params = [];
 
@@ -34,7 +29,7 @@ try {
         $params[] = (int) $_GET['id_emprendedor'];
     }
 
-    // Mensajes publicados por los emprendedores (visibles para los consumidores)
+    // Mensajes
     $sql = "SELECT a.id_aviso, a.id_emprendedor, a.id_feria, a.mensaje, a.imagen_url, a.fecha_creacion,
                    u.nombre AS emprendedor, f.nombre_feria
             FROM Avisos a
