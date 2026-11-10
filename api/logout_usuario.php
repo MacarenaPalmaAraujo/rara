@@ -1,6 +1,6 @@
 <?php
-header('Content-Type: application/json');
-require_once '../db.php';
+header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../db.php';
 
 // Finalizar la sesión activa
 if (session_status() === PHP_SESSION_NONE) {

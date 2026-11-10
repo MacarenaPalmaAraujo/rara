@@ -14,14 +14,24 @@
 
             <form onsubmit="registrarNuevaFeriaBD(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Nombre o Lugar de la Feria</label>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Nombre de la Feria</label>
                     <input type="text" id="feriaNombre" required value="Feria de Caballito" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Lugar / Dirección</label>
+                    <input type="text" id="feriaDireccion" required value="Av. Rivadavia 4800, Caballito" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Día</label>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Día de Inicio</label>
                         <input type="date" id="feriaDia" required value="2026-11-14" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                     </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Día de Fin</label>
+                        <input type="date" id="feriaFechaFin" value="2026-11-14" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Hora de Apertura</label>
                         <input type="time" id="feriaHoraApertura" required value="12:00" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
@@ -32,8 +42,12 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Permisos Municipales</label>
-                    <input type="text" required value="Permiso_municipal_aprobado_2026.pdf" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Descripción de la Feria</label>
+                    <textarea id="feriaDescripcion" rows="3" placeholder="Contá qué se va a poder encontrar en la feria..." class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Instagram de la Feria</label>
+                    <input type="text" id="feriaInstagram" placeholder="@mi_feria" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>

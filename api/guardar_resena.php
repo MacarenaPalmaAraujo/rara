@@ -1,15 +1,19 @@
 <?php
 // api/guardar_resena.php
 // Guarda la reseña de un consumidor sobre una feria.
-header('Content-Type: application/json');
-require_once '../db.php';
+header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../db.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $data = json_decode(file_get_contents('php://input'), true);
 if (empty($data)) {
     $data = $_POST;
 }
 
-$idConsumidor = (int) ($data['id_consumidor'] ?? 0);
+$idConsumidor = (int) ($_SESSION['usuario_id'] ?? $data['id_consumidor'] ?? 0);
 $idFeria      = (int) ($data['id_feria'] ?? 0);
 $calificacion = (int) ($data['calificacion'] ?? 0);
 $comentario   = trim($data['comentario'] ?? '');
@@ -32,25 +36,22 @@ if ($comentario === '') {
 }
 
 try {
-    // La tabla puede no existir en instalaciones viejas: la creamos si hace falta.
-    $pdo->exec(
-        "CREATE TABLE IF NOT EXISTS resenas (
-            id_resena INT AUTO_INCREMENT PRIMARY KEY,
-            id_consumidor INT NOT NULL,
-            id_feria INT NOT NULL,
-            calificacion INT NOT NULL,
-            comentario TEXT NULL,
-            fecha_resena TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            KEY idx_resenas_feria (id_feria),
-            KEY idx_resenas_consumidor (id_consumidor)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
-    );
-
     // Verificamos que existan el usuario y la feria antes de guardar.
-    $stmt = $pdo->prepare('SELECT id_usuario FROM Usuarios WHERE id_usuario = ?');
+    $stmt = $pdo->prepare(
+        'SELECT u.id_usuario, LOWER(r.nombre) AS rol
+         FROM Usuarios u
+         LEFT JOIN roles r ON r.id_rol = u.id_rol
+         WHERE u.id_usuario = ?'
+    );
     $stmt->execute([$idConsumidor]);
-    if (!$stmt->fetch()) {
+    $usuario = $stmt->fetch();
+
+    if (!$usuario) {
         echo json_encode(['status' => 'error', 'message' => 'La cuenta del consumidor no existe.']);
+        exit;
+    }
+    if (($usuario['rol'] ?? '') !== 'consumidor') {
+        echo json_encode(['status' => 'error', 'message' => 'Solo los usuarios con rol de consumidor pueden publicar reseñas.']);
         exit;
     }
 

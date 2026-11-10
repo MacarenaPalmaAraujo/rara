@@ -64,7 +64,16 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Calendario de Eventos</span>
-                    <h2 id="calendarMonthTitle" class="font-display text-2xl sm:text-3xl font-black text-white">Mayo 2026</h2>
+                    <div class="flex items-center gap-3 mt-1">
+                        <h2 id="calendarMonthTitle" class="font-display text-2xl sm:text-3xl font-black text-white">Mayo 2026</h2>
+                        <select id="yearSelector" onchange="changeCalendarYear(this.value)" class="bg-slate-800 text-amber-300 text-xs font-extrabold px-3 py-1.5 rounded-xl border border-white/15 outline-none cursor-pointer hover:bg-slate-700 transition-colors">
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -124,9 +133,14 @@
                         </p>
                     </div>
 
-                    <button id="fairFavoriteBtn" onclick="toggleFairFavorite()" class="w-12 h-12 rounded-2xl bg-slate-900 hover:bg-slate-950 text-slate-400 hover:text-amber-400 font-extrabold flex items-center justify-center text-xl shadow-lg transition-all shrink-0 border border-white/10">
-                        <i class="fa-solid fa-star"></i>
-                    </button>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button id="fairFavoriteBtn" onclick="toggleFairFavorite()" title="Guardar en favoritos" class="w-12 h-12 rounded-2xl bg-slate-900 hover:bg-slate-950 text-slate-400 hover:text-amber-400 font-extrabold flex items-center justify-center text-xl shadow-lg transition-all shrink-0 border border-white/10">
+                            <i class="fa-solid fa-star"></i>
+                        </button>
+                        <button id="fairDeleteBtn" onclick="eliminarFeriaActual()" title="Eliminar esta feria" class="hidden w-12 h-12 rounded-2xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white font-extrabold flex items-center justify-center text-lg shadow-lg transition-all shrink-0 border border-red-400/40">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div>
@@ -190,5 +204,13 @@
                 </div>
             </div>
         </section>
+
+        <!-- Panel chiquito de la feria: aparece al pasar el mouse o tocar un día del calendario -->
+        <div id="calendarFairPopover"
+             class="hidden fixed z-[60] bg-slate-900 border border-amber-400/40 rounded-2xl p-3 shadow-2xl space-y-2"
+             onmouseenter="cancelHideFairPopover()"
+             onmouseleave="scheduleHideFairPopover()">
+            <!-- Contenido dinámico vía JS -->
+        </div>
 
     </main>

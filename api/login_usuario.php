@@ -1,8 +1,8 @@
 <?php
 // api/login_usuario.php
 // Valida el correo y la contraseña contra la tabla Usuarios y devuelve el rol.
-header('Content-Type: application/json');
-require_once '../db.php';
+header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../db.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -10,8 +10,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $data = json_decode(file_get_contents('php://input'), true) ?: [];
 
-$email = trim($data['email'] ?? '');
-$contrasena = trim($data['contrasena'] ?? '');
+$email = strtolower(trim($data['email'] ?? ''));
+$contrasena = (string) ($data['contrasena'] ?? '');
 
 if ($email === '' || $contrasena === '') {
     echo json_encode(['status' => 'error', 'message' => 'Por favor, completá todos los campos.']);
@@ -24,7 +24,8 @@ try {
         "SELECT u.id_usuario, u.nombre, u.email, u.contrasena, r.nombre AS rol
          FROM Usuarios u
          LEFT JOIN roles r ON r.id_rol = u.id_rol
-         WHERE u.email = ?"
+         WHERE LOWER(u.email) = ?
+         LIMIT 1"
     );
     $stmt->execute([$email]);
     $usuario = $stmt->fetch();

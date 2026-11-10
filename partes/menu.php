@@ -68,13 +68,13 @@
             </div>
 
             <div class="space-y-4">
-                <div id="drawerProfileBox" class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                <div id="drawerProfileBox" onclick="handleDrawerProfileClick()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();handleDrawerProfileClick();}" class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3 cursor-pointer hover:bg-white/10 transition-colors" title="Iniciar sesión">
                     <div id="drawerAvatar" class="w-12 h-12 rounded-full bg-slate-800 font-extrabold text-amber-400 flex items-center justify-center text-lg border-2 border-amber-400/40 shrink-0">
                         <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="overflow-hidden">
                         <p id="drawerUserName" class="font-bold text-sm text-white truncate">Invitado</p>
-                        <span id="drawerUserRole" class="inline-block px-2 py-0.5 rounded text-[10px] bg-white/10 text-slate-300 font-bold border border-white/15">Sin sesión iniciada</span>
+                        <span id="drawerUserRole" class="inline-block px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 underline">Sin sesión iniciada · Iniciar sesión</span>
                     </div>
                 </div>
 
@@ -82,6 +82,12 @@
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2">Acceso Rápido</p>
                     <button onclick="showSection('home'); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-house text-amber-400"></i> Inicio / Calendario
+                    </button>
+                    <button id="drawerFavoritosBtn" onclick="openFavoritosModal(); toggleDrawer();" class="hidden w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
+                        <i class="fa-solid fa-star text-amber-400"></i> Mis Favoritos
+                    </button>
+                    <button onclick="showAvisoForm(); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
+                        <i class="fa-solid fa-bullhorn text-amber-400"></i> Avisar en qué feria estoy
                     </button>
                     <button onclick="openModal('authModal'); toggleDrawer();" class="w-full text-left px-4 py-3 rounded-xl bg-white/5 hover:bg-orange-600 text-white font-semibold text-sm flex items-center gap-3 transition-colors">
                         <i class="fa-solid fa-user-plus text-amber-400"></i> Autenticación / Registro

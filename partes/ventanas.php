@@ -84,6 +84,23 @@
         </div>
     </div>
 
+    <!-- Modal: Mis Favoritos (consumidor) -->
+    <div id="favoritosModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-slate-900 border border-white/20 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex items-start justify-between border-b border-white/10 pb-3 gap-3">
+                <div>
+                    <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Consumidor</span>
+                    <h4 class="font-display font-bold text-white text-lg"><i class="fa-solid fa-star text-amber-400 mr-1"></i> Mis Favoritos</h4>
+                    <p class="text-[11px] text-slate-400 font-semibold">Las ferias que guardaste para no olvidarte.</p>
+                </div>
+                <button onclick="closeModal('favoritosModal')" class="text-slate-400 hover:text-white shrink-0"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="favoritosList" class="space-y-3">
+                <!-- Dinámico vía JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Quiénes asisten a la feria -->
     <div id="asistentesModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-slate-900 border border-white/20 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">

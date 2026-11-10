@@ -36,6 +36,8 @@ Documentación completa, archivo por archivo, con SQL y preguntas posibles del p
 │   ├── guardar_favorito.php     Guarda o quita un favorito
 │   ├── guardar_resena.php       Guarda una reseña
 │   ├── get_resenas.php          Devuelve las reseñas de una feria
+│   ├── eliminar_resena.php      Elimina un comentario (autor u organizador)
+│   ├── eliminar_feria.php       Elimina una feria (solo su organizador)
 │   ├── guardar_usuario.php      Registra una cuenta
 │   ├── login_usuario.php        Inicia sesión y devuelve el rol
 │   └── logout_usuario.php       Cierra la sesión
@@ -43,6 +45,17 @@ Documentación completa, archivo por archivo, con SQL y preguntas posibles del p
 ├── db.php                       Conexión a MySQL
 └── feriando.sql                 Estructura de la base de datos
 ```
+
+## Base de datos
+
+1. Encienda MySQL desde el panel de XAMPP.
+2. Abra phpMyAdmin o la consola de MySQL y ejecute **todo** el archivo `feriando.sql`.
+   - Por consola: `mysql -u root -p < feriando.sql`
+   - También se puede pegar completo en la pestaña **SQL** de phpMyAdmin.
+3. `feriando.sql` se puede importar varias veces: crea las tablas que falten, agrega las columnas, índices y relaciones nuevas, y **no borra** los usuarios, ferias ni contraseñas existentes.
+4. Si su MySQL usa otra contraseña, cámbiela en `db.php` (`$user` y `$pass`). La base se llama `feriando` y se crea automáticamente si no existe.
+
+Los usuarios se guardan en la tabla `Usuarios`; la contraseña se almacena cifrada con `password_hash()` y se valida con `password_verify()` al iniciar sesión.
 
 ## Cómo funciona el registro de ferias
 

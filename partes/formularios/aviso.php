@@ -5,8 +5,8 @@
             <div class="flex items-start justify-between gap-3 border-b border-white/20 pb-4">
                 <div>
                     <span class="text-xs font-extrabold text-amber-300 uppercase tracking-widest">Emprendedores</span>
-                    <h2 class="font-display text-2xl font-black text-white">Publicá tu Mensaje</h2>
-                    <p class="text-xs text-amber-200 font-semibold mt-1">Escribí tu mensaje y subí una foto de tu emprendimiento.</p>
+                    <h2 class="font-display text-2xl font-black text-white">Mi Perfil de Emprendedor</h2>
+                    <p class="text-xs text-amber-200 font-semibold mt-1">Avisá en qué feria estás: lugar, hora, puesto, Instagram y una foto de tu emprendimiento.</p>
                 </div>
                 <button onclick="showSection('home')" class="text-xs bg-slate-900/80 hover:bg-slate-900 text-white font-bold px-3 py-1.5 rounded-xl shrink-0">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Volver
@@ -19,6 +19,24 @@
                     <select id="avisoFeriaId" required class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                         <option value="">Seleccioná una feria</option>
                     </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Lugar</label>
+                        <input type="text" id="avisoLugar" placeholder="Ej: Plaza Italia" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Hora</label>
+                        <input type="text" id="avisoHora" placeholder="Ej: 14:00 a 20:00" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Puesto</label>
+                        <input type="text" id="avisoPuesto" placeholder="Ej: 12" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Instagram del Emprendimiento</label>
+                    <input type="text" id="avisoInstagram" placeholder="@mi_emprendimiento" class="w-full bg-slate-950/80 border border-white/20 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 font-semibold">
                 </div>
                 <div>
                     <label class="block text-xs font-extrabold text-amber-200 uppercase mb-1">Mensaje del Emprendedor</label>

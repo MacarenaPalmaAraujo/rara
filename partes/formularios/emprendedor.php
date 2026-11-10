@@ -31,5 +31,12 @@
                     </button>
                 </div>
             </form>
+
+            <div class="pt-2 border-t border-white/20">
+                <button type="button" onclick="showAvisoForm()" class="w-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-display font-black py-3.5 rounded-2xl shadow-xl transition-all text-sm tracking-wide uppercase flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bullhorn"></i> Avisar en qué feria estoy
+                </button>
+                <p class="text-[11px] text-amber-100 text-center mt-2 font-semibold">Ahí podés cargar lugar, hora, puesto, Instagram y foto de tu emprendimiento.</p>
+            </div>
         </div>
     </section>

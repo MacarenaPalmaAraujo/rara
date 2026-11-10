@@ -1,8 +1,8 @@
 <?php
 // api/get_resenas.php
 // Devuelve las reseñas de una feria junto con el nombre de quien la escribió.
-header('Content-Type: application/json');
-require_once '../db.php';
+header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../db.php';
 
 $idFeria = (int) ($_GET['id_feria'] ?? 0);
 

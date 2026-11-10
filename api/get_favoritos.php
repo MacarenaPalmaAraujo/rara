@@ -1,28 +1,41 @@
 <?php
-header('Content-Type: application/json');
-require_once '../db.php';
+// api/get_favoritos.php
+// Devuelve las ferias favoritas del consumidor.
+header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../db.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (empty($_SESSION['usuario_id'])) {
-    echo json_encode(["status" => "error", "message" => "Necesitás iniciar sesión para ver tus favoritos."]);
+$idUsuario = (int) ($_SESSION['usuario_id'] ?? $_GET['id_consumidor'] ?? 0);
+
+if ($idUsuario <= 0) {
+    echo json_encode(['status' => 'error', 'message' => 'Necesitás iniciar sesión para ver tus favoritos.']);
     exit;
 }
 
 try {
-    $pdo->exec("CREATE TABLE IF NOT EXISTS Favoritos (
-        id_favorito INT AUTO_INCREMENT PRIMARY KEY,
-        id_consumidor INT NOT NULL,
-        id_feria INT NOT NULL,
-        fecha_guardado TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-    $stmt = $pdo->prepare("SELECT f.id_feria, f.nombre_feria, f.direccion_texto, f.imagen_url, f.categoria, ff.fecha_inicio, ff.hora_apertura, ff.hora_cierre FROM Favoritos fav INNER JOIN Ferias f ON fav.id_feria = f.id_feria LEFT JOIN Fechas_Feria ff ON f.id_feria = ff.id_feria WHERE fav.id_consumidor = ?");
-    $stmt->execute([(int) $_SESSION['usuario_id']]);
+    $stmt = $pdo->prepare(
+        "SELECT f.id_feria, f.id_organizador, f.nombre_feria, f.direccion_texto,
+                f.descripcion, f.imagen_url, f.categoria, f.instagram,
+                ff.fecha_inicio, ff.fecha_fin, ff.hora_apertura, ff.hora_cierre,
+                fav.fecha_guardado
+         FROM Favoritos fav
+         INNER JOIN Ferias f ON fav.id_feria = f.id_feria
+         LEFT JOIN Fechas_Feria ff ON ff.id_fecha = (
+             SELECT MIN(ff2.id_fecha)
+             FROM Fechas_Feria ff2
+             WHERE ff2.id_feria = f.id_feria
+         )
+         WHERE fav.id_consumidor = ?
+         ORDER BY fav.fecha_guardado DESC"
+    );
+    $stmt->execute([$idUsuario]);
     $favoritos = $stmt->fetchAll();
 
-    echo json_encode(["status" => "success", "data" => $favoritos]);
+    echo json_encode(['status' => 'success', 'data' => $favoritos]);
 } catch (Exception $e) {
-    echo json_encode(["status" => "error", "message" => "Error al obtener los favoritos: " . $e->getMessage()]);
+    echo json_encode(['status' => 'error', 'message' => 'Error al obtener los favoritos: ' . $e->getMessage()]);
 }
 ?>
